@@ -21,7 +21,7 @@ VEL = 5
 FPS = 60
 
 BULLET_VEL = 7
-MAX_BULLETS = 5
+MAX_BULLETS = 20
 
 YELLOW_HIT = pygame.USEREVENT + 1 # create a new event and adding + 1 too keep it unique
 RED_HIT = pygame.USEREVENT + 2
@@ -95,9 +95,9 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
             red_bullets.remove(bullet)
 
 
-def draw_winner():
+def draw_winner(text):
     draw_text = WINNER_FONT.render(text, 1, WHITE)
-    WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width/2, WIDTH/2 - draw_text.get_width/2))
+    WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGHT/2 - draw_text.get_height()/2))
     pygame.display.update()
     pygame.time.delay(5000)
 
@@ -121,7 +121,7 @@ def main(): # create main game loop in the main function
         for event in pygame.event.get(): # loop through all events in python
             if event.type == pygame.QUIT: # if QUIT is the event that occurs, set run to False which quits game
                 run = False
-                pygame.quit
+                pygame.quit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
@@ -138,6 +138,7 @@ def main(): # create main game loop in the main function
             if event.type == YELLOW_HIT:
                 yellow_health -= 1
 
+
         winner_text = ""
         if red_health <= 0:
             winner_text = "Yellow Wins!"
@@ -147,9 +148,11 @@ def main(): # create main game loop in the main function
         
         if winner_text != "":
             draw_winner(winner_text)
+            break
+
 
         keys_pressed = pygame.key.get_pressed() # every time the while loop is running, it's going to tell us what keys are pressed
-        
+
         yellow_handle_movement(keys_pressed, yellow)
         red_handle_movement(keys_pressed, red)
 
